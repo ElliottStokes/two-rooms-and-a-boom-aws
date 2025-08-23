@@ -5,8 +5,10 @@
     "two-rooms-and-a-boom-aws": "bin/two-rooms-and-a-boom.js"
   },
   "scripts": {
+    "deploy": "cdk deploy TwoRoomsAndABoomStack",
+    "watch": "cdk watch TwoRoomsAndABoomStack",
+    "delete": "cdk destroy TwoRoomsAndABoomStack",
     "build": "tsc",
-    "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"
   },

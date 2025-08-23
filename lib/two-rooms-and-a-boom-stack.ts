@@ -1,8 +1,9 @@
-import { aws_lambda, CfnOutput, Stack, StackProps } from 'aws-cdk-lib';
+import { aws_lambda, CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 const AWS_ACCOUNT_ID = process.env.AWS_ACCOUNT_ID ?? '';
 const AWS_REGION = process.env.AWS_REGION ?? '';
@@ -16,17 +17,26 @@ export class TwoRoomsAndABoomStack extends Stack {
       functionName: 'setActiveCards',
       runtime: Runtime.NODEJS_22_X,
       handler: 'index.handler',
-      entry: 'src/functions/setActiveCards/index.ts'
+      entry: 'src/functions/setActiveCards/index.ts',
+      logGroup: createLogGroup(this, 'setActiveCards'),
     });
 
     setActiveCards.addToRolePolicy(new PolicyStatement({
       actions: ['dsql:DbConnectAdmin'],
       resources: [`arn:aws:dsql:${AWS_REGION}:${AWS_ACCOUNT_ID}:cluster/${DSQL_CLUSTER_ID}`],
-    }))
+    }));
     const setActiveCardsUrl = setActiveCards.addFunctionUrl({
       authType: aws_lambda.FunctionUrlAuthType.NONE,
     });
 
-    new CfnOutput(this, "setActiveCardsUrlOutput", { value: setActiveCardsUrl.url })
+    new CfnOutput(this, 'setActiveCardsUrlOutput', { value: setActiveCardsUrl.url });
   }
+}
+
+function createLogGroup(scope: Construct, functionName: string) {
+  return new LogGroup(scope, `${functionName}LogGroup`, {
+    logGroupName: `/aws/lambda/${functionName}`,
+    retention: RetentionDays.ONE_DAY,
+    removalPolicy: RemovalPolicy.DESTROY,
+  })
 }
