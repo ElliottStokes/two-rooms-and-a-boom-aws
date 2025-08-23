@@ -11,14 +11,19 @@ async function handler({ body }: APIGatewayProxyEvent) {
     return { statusCode: 400, body: 'Missing body from request' };
   }
   const { activeCardNames } = JSON.parse(body);
-  logger.info('Setting active card names', { activeCardNames });
+  if (!activeCardNames) {
+    return { statusCode: 400, body: 'missing activeCardNames from request body' };
+  }
 
   try {
     await resetActiveCards();
     await setActiveCards(activeCardNames);
     return { statusCode: 204 };  
   } catch (error) {
-    logger.error('ERROR', { error: JSON.parse(JSON.stringify(error)) })
+    logger.error(
+      'Error occured while setting active cards', 
+      { error: JSON.parse(JSON.stringify(error)) }
+    );
     return { statusCode: 500, body: 'Something went wrong' };
   }
 }

@@ -10,7 +10,28 @@ Lambdas: TypeScript ~5.6.3
 ### Prerequisites
 * run `cdk bootstrap` to bootstrap your AWS account
 * Need to export values in the environment variable in order to deploy
+  * DSQL_CLUSTER_ID: found on AWS console, go to Aurora DSQL > Clusters and copy Cluster ID
+  * DSQL_CLUSTER_ENDPOINT: found on AWS console, go to Aurora DSQL > Clusters and copy Endpoint
 
-To deploy run `npm run deploy`
+To deploy run:
+```
+npm run deploy
+```
 
-To deploy with hot refresh run `npm run watch`
+To deploy with hot refresh run:
+```
+npm run watch
+```
+
+To delete the stack run:
+```
+npm run delete
+```
+
+## Testing
+
+### Postgres scripts
+Check active cards:
+```
+SELECT * FROM two_rooms_and_a_boom.card WHERE isactive = TRUE;
+```
