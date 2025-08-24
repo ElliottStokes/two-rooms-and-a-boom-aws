@@ -10,7 +10,7 @@ async function handler() {
     return { statusCode: 200 };  
   } catch (error) {
     logger.error(
-      'Error occured while resetting active cards', 
+      'Error occurred while resetting active cards', 
       { error: JSON.parse(JSON.stringify(error)) }
     );
     return { statusCode: 500, body: 'Something went wrong' };

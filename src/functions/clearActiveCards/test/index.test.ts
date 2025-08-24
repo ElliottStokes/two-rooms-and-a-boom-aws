@@ -17,7 +17,7 @@ describe('clearActiveCards', () => {
   });
 
   it('should return 500 error response when resetActiveCards throws an error', async () => {
-    jest.mocked(resetActiveCards).mockRejectedValue(new Error('Error reseting active cards'));
+    jest.mocked(resetActiveCards).mockRejectedValue(new Error('Error resetting active cards'));
     const response = await handler();
     expect(response).toStrictEqual({
       statusCode: 500,
