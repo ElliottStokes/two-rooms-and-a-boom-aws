@@ -1,6 +1,6 @@
-import { aws_lambda, CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -14,31 +14,30 @@ export class TwoRoomsAndABoomStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const setActiveCards = new NodejsFunction(this, 'setActiveCards', {
-      functionName: 'setActiveCards',
-      runtime: Runtime.NODEJS_22_X,
-      handler: 'index.handler',
-      entry: 'src/functions/setActiveCards/index.ts',
-      logGroup: createLogGroup(this, 'setActiveCards'),
-      environment: { DSQL_CLUSTER_ENDPOINT }
-    });
-
-    setActiveCards.addToRolePolicy(new PolicyStatement({
-      actions: ['dsql:DbConnectAdmin'],
-      resources: [`arn:aws:dsql:${AWS_REGION}:${AWS_ACCOUNT_ID}:cluster/${DSQL_CLUSTER_ID}`],
-    }));
-    const setActiveCardsUrl = setActiveCards.addFunctionUrl({
-      authType: aws_lambda.FunctionUrlAuthType.NONE,
-    });
-
-    new CfnOutput(this, 'setActiveCardsUrlOutput', { value: setActiveCardsUrl.url });
+    createEndpoint(this, 'setActiveCards');
+    createEndpoint(this, 'clearActiveCards');
   }
 }
 
-function createLogGroup(scope: Construct, functionName: string) {
-  return new LogGroup(scope, `${functionName}LogGroup`, {
-    logGroupName: `/aws/lambda/${functionName}`,
-    retention: RetentionDays.ONE_DAY,
-    removalPolicy: RemovalPolicy.DESTROY,
+function createEndpoint(scope: Construct, functionName: string) {
+  const endpointFunction = new NodejsFunction(scope, functionName, {
+    functionName,
+    runtime: Runtime.NODEJS_22_X,
+    handler: 'index.handler',
+    entry: `src/functions/${functionName}/index.ts`,
+    logGroup: new LogGroup(scope, `${functionName}LogGroup`, {
+      logGroupName: `/aws/lambda/${functionName}`,
+      retention: RetentionDays.ONE_DAY,
+      removalPolicy: RemovalPolicy.DESTROY,
+    }),
+    environment: { DSQL_CLUSTER_ENDPOINT }
+  });
+  endpointFunction.addToRolePolicy(new PolicyStatement({
+    actions: ['dsql:DbConnectAdmin'],
+    resources: [`arn:aws:dsql:${AWS_REGION}:${AWS_ACCOUNT_ID}:cluster/${DSQL_CLUSTER_ID}`],
+  }));
+  const { url } = endpointFunction.addFunctionUrl({
+    authType: FunctionUrlAuthType.NONE
   })
+  new CfnOutput(scope, `${functionName}UrlOutput`, { value: url });
 }
