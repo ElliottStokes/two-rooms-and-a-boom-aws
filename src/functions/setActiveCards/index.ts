@@ -21,7 +21,7 @@ async function handler({ body }: APIGatewayProxyEvent) {
     return { statusCode: 204 };  
   } catch (error) {
     logger.error(
-      'Error occured while setting active cards', 
+      'Error occurred while setting active cards', 
       { error: JSON.parse(JSON.stringify(error)) }
     );
     return { statusCode: 500, body: 'Something went wrong' };
