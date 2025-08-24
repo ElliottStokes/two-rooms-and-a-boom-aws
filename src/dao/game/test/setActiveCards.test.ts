@@ -13,24 +13,24 @@ jest.mock('../../client', () => ({
 const MOCK_ACTIVE_CARD_NAMES = ['cardOne', 'cardTwo', 'cardThree'];
 
 describe('setActiveCards', () => {
-  test('should call getClient function', async () => {
+  it('should call getClient function', async () => {
     await setActiveCards(MOCK_ACTIVE_CARD_NAMES);
     expect(getClient).toHaveBeenCalled();
   });
 
-  test('should call Client with query function', async () => {
+  it('should call Client with query function', async () => {
     await setActiveCards(MOCK_ACTIVE_CARD_NAMES);
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
       "UPDATE two_rooms_and_a_boom.card SET isactive = TRUE WHERE cardtitle IN ('cardOne', 'cardTwo', 'cardThree');"
     );
   });
 
-  test('should not call getClient function if empty string passed in', async () => {
+  it('should not call getClient function if empty string passed in', async () => {
     await setActiveCards([]);
     expect(getClient).not.toHaveBeenCalled();
   });
 
-  test('should not call Client query function if empty string passed in', async () => {
+  it('should not call Client query function if empty string passed in', async () => {
     await setActiveCards([]);
     expect(CLIENT_MOCK.query).not.toHaveBeenCalled();
   });

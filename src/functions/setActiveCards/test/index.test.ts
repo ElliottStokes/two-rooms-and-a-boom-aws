@@ -15,22 +15,22 @@ const MOCK_API_GATEWAY_PROXY_EVENT = {
 } as unknown as APIGatewayProxyEvent;
 
 describe('setActiveCards', () => {
-  test('should return statusCode 204 on successful run', async () => {
+  it('should return statusCode 204 on successful run', async () => {
     const { statusCode } = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(statusCode).toEqual(204);
   });
 
-  test('should call resetActiveCards dao function once', async () => {
+  it('should call resetActiveCards dao function once', async () => {
     await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(resetActiveCards).toHaveBeenCalled();
   });
 
-  test('should call setActiveCards dao function with activeCardNames list', async () => {
+  it('should call setActiveCards dao function with activeCardNames list', async () => {
     await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(setActiveCards).toHaveBeenCalledWith(['cardOne', 'cardTwo', 'cardThree']);
   });
 
-  test('should return 400 error response when request is missing body', async () => {
+  it('should return 400 error response when request is missing body', async () => {
     const response = await handler({} as unknown as APIGatewayProxyEvent);
     expect(response).toStrictEqual({
       statusCode: 400,
@@ -38,7 +38,7 @@ describe('setActiveCards', () => {
     });
   });
 
-  test('should return 400 error response when activeCardNames missing from body', async () => {
+  it('should return 400 error response when activeCardNames missing from body', async () => {
     const response = await handler({
       ...MOCK_API_GATEWAY_PROXY_EVENT,
       body: JSON.stringify({}),
@@ -49,7 +49,7 @@ describe('setActiveCards', () => {
     });
   });
 
-  test('should return 500 error response when resetActiveCards throws an error', async () => {
+  it('should return 500 error response when resetActiveCards throws an error', async () => {
     jest.mocked(resetActiveCards).mockRejectedValue(new Error('Error reseting active cards'));
     const response = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(response).toStrictEqual({
@@ -58,7 +58,7 @@ describe('setActiveCards', () => {
     })
   });
 
-  test('should return 500 error response when setActiveCards throws an error', async () => {
+  it('should return 500 error response when setActiveCards throws an error', async () => {
     jest.mocked(setActiveCards).mockRejectedValue(new Error('Error setting active cards'));
     const response = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(response).toStrictEqual({

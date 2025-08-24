@@ -17,7 +17,7 @@ const AWS_REGION = process.env.AWS_REGION ?? '';
 const DSQL_CLUSTER_ENDPOINT = process.env.DSQL_CLUSTER_ENDPOINT ?? '';
 
 describe('client', () => {
-  test('should instantiate client on first call', async () => {
+  it('should instantiate client on first call', async () => {
     await getClient();
     expect(DsqlSigner).toHaveBeenCalledWith({
       hostname: DSQL_CLUSTER_ENDPOINT,

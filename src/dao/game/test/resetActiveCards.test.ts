@@ -11,12 +11,12 @@ jest.mock('../../client', () => ({
 }));
 
 describe('resetActiveCards', () => {
-  test('should call getClient function', async () => {
+  it('should call getClient function', async () => {
     await resetActiveCards();
     expect(getClient).toHaveBeenCalled();
   });
 
-  test('should call Client with query function', async () => {
+  it('should call Client with query function', async () => {
     await resetActiveCards();
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
       'UPDATE two_rooms_and_a_boom.card SET isActive = FALSE WHERE isActive = TRUE AND isBasic = FALSE;'
