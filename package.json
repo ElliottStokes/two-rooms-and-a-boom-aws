@@ -10,6 +10,7 @@
     "delete": "cdk destroy TwoRoomsAndABoomStack",
     "build": "tsc",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "cdk": "cdk"
   },
   "devDependencies": {

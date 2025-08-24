@@ -16,6 +16,7 @@ export class TwoRoomsAndABoomStack extends Stack {
 
     createEndpoint(this, 'setActiveCards');
     createEndpoint(this, 'clearActiveCards');
+    createEndpoint(this, 'registerNewPlayer');
   }
 }
 

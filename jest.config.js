@@ -6,4 +6,5 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest'
   },
   clearMocks: true,
+  setupFiles: ['<rootDir>/testUtils/testSetup.ts'],
 };

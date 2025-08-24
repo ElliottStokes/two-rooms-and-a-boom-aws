@@ -35,3 +35,8 @@ Check active cards:
 ```
 SELECT * FROM two_rooms_and_a_boom.card WHERE isactive = TRUE;
 ```
+
+Check registered players:
+```
+SELECT * FROM two_rooms_and_a_boom.player;
+```

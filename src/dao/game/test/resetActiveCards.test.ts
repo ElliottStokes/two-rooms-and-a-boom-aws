@@ -1,14 +1,6 @@
-import { getClient } from "../../client";
-import { resetActiveCards } from "../resetActiveCards";
-
-const CLIENT_MOCK = {
-  connect: jest.fn(),
-  query: jest.fn(),
-  end: jest.fn(),
-};
-jest.mock('../../client', () => ({
-  getClient: jest.fn().mockImplementation(() => (CLIENT_MOCK))
-}));
+import { CLIENT_MOCK } from '../../../../testUtils';
+import { getClient } from '../../client';
+import { resetActiveCards } from '../resetActiveCards';
 
 describe('resetActiveCards', () => {
   it('should call getClient function', async () => {
