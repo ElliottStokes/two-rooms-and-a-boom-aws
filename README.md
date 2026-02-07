@@ -5,6 +5,8 @@ AWS deployment: CDK 2.201.0
 
 Lambdas: TypeScript ~5.6.3
 
+npm 11.9.0
+
 ## Deployment
 
 ### Prerequisites
