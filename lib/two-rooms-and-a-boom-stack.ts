@@ -34,7 +34,7 @@ function createEndpoint(scope: Construct, functionName: string) {
     environment: { DSQL_CLUSTER_ENDPOINT }
   });
   endpointFunction.addToRolePolicy(new PolicyStatement({
-    actions: ['dsql:DbConnect'],
+    actions: ['dsql:*'],
     resources: [`arn:aws:dsql:${AWS_REGION}:${AWS_ACCOUNT_ID}:cluster/${DSQL_CLUSTER_ID}`],
   }));
   const { url } = endpointFunction.addFunctionUrl({
