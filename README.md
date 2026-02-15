@@ -5,7 +5,9 @@ AWS deployment: CDK 2.201.0
 
 Lambdas: TypeScript ~5.6.3
 
-npm 11.9.0
+node: 22.x
+
+[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts)
 
 ## Deployment
 

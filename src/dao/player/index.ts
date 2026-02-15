@@ -1,2 +1,2 @@
-export { checkExistingCredentials } from './checkExistingCredentials';
-export { createNewPlayer } from './createNewPlayer';
+export {checkExistingCredentials} from './checkExistingCredentials';
+export {createNewPlayer} from './createNewPlayer';

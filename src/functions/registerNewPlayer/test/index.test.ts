@@ -1,9 +1,9 @@
-import { randomUUID } from 'crypto';
+import {randomUUID} from 'crypto';
 
-import { handler } from '..'
-import { checkExistingCredentials, createNewPlayer } from '../../../dao/player';
+import {handler} from '..';
+import {checkExistingCredentials, createNewPlayer} from '../../../dao/player';
 
-import type { APIGatewayProxyEvent } from 'aws-lambda';
+import type {APIGatewayProxyEvent} from 'aws-lambda';
 
 jest.mock('../../../dao/player', () => ({
   checkExistingCredentials: jest.fn(),
@@ -13,7 +13,7 @@ jest.mock('../../../dao/player', () => ({
 const TEST_USERNAME = 'test-user';
 
 const MOCK_API_GATEWAY_PROXY_EVENT = {
-  body: JSON.stringify({ username: TEST_USERNAME }),
+  body: JSON.stringify({username: TEST_USERNAME}),
 } as unknown as APIGatewayProxyEvent;
 
 describe('registerNewPlayer', () => {
@@ -22,16 +22,18 @@ describe('registerNewPlayer', () => {
 
     beforeEach(() => {
       jest.mocked(checkExistingCredentials).mockResolvedValue(null);
-      jest.mocked(createNewPlayer).mockResolvedValue({ id: mockUserId, username: TEST_USERNAME })
+      jest
+        .mocked(createNewPlayer)
+        .mockResolvedValue({id: mockUserId, username: TEST_USERNAME});
     });
 
     it('should return status code 201', async () => {
-      const { statusCode } = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
+      const {statusCode} = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
       expect(statusCode).toStrictEqual(201);
     });
-  
+
     it('should return user details', async () => {
-      const { body } = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
+      const {body} = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
       expect(JSON.parse(body)).toStrictEqual({
         id: mockUserId,
         username: TEST_USERNAME,
@@ -43,16 +45,18 @@ describe('registerNewPlayer', () => {
     const mockUserId = randomUUID();
 
     beforeEach(() => {
-      jest.mocked(checkExistingCredentials).mockResolvedValue({ id: mockUserId, username: TEST_USERNAME })
+      jest
+        .mocked(checkExistingCredentials)
+        .mockResolvedValue({id: mockUserId, username: TEST_USERNAME});
     });
 
     it('should return status code 200', async () => {
-      const { statusCode } = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
+      const {statusCode} = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
       expect(statusCode).toStrictEqual(200);
     });
 
     it('should return existing user details', async () => {
-      const { body } = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
+      const {body} = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
       expect(JSON.parse(body)).toStrictEqual({
         id: mockUserId,
         username: TEST_USERNAME,

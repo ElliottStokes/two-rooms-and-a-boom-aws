@@ -1,5 +1,8 @@
 *.js
 !jest.config.js
+!eslint.config.js
+!eslint.ignores.js
+!.prettierrc.js
 *.d.ts
 node_modules
 coverage

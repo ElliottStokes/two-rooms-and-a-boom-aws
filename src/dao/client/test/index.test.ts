@@ -1,6 +1,6 @@
-import { DsqlSigner } from "@aws-sdk/dsql-signer";
-import { getClient } from "..";
-import { Client } from "pg";
+import {DsqlSigner} from '@aws-sdk/dsql-signer';
+import {getClient} from '..';
+import {Client} from 'pg';
 
 const MOCK_SIGNER = {
   getDbConnectAdminAuthToken: jest.fn().mockResolvedValue('MOCK_TOKEN'),
@@ -8,7 +8,7 @@ const MOCK_SIGNER = {
 jest.mock('@aws-sdk/dsql-signer', () => ({
   DsqlSigner: jest.fn().mockImplementation(() => MOCK_SIGNER),
 }));
-const MOCK_CLIENT = { connect: jest.fn() };
+const MOCK_CLIENT = {connect: jest.fn()};
 jest.mock('pg', () => ({
   Client: jest.fn().mockImplementation(() => MOCK_CLIENT),
 }));
@@ -22,7 +22,7 @@ describe('client', () => {
     expect(DsqlSigner).toHaveBeenCalledWith({
       hostname: DSQL_CLUSTER_ENDPOINT,
       region: AWS_REGION,
-    })
+    });
     expect(Client).toHaveBeenCalledWith({
       host: DSQL_CLUSTER_ENDPOINT,
       user: 'admin',

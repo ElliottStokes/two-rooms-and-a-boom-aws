@@ -1,9 +1,9 @@
-import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-import { Runtime, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import {CfnOutput, RemovalPolicy, Stack, StackProps} from 'aws-cdk-lib';
+import {Construct} from 'constructs';
+import {Runtime, FunctionUrlAuthType} from 'aws-cdk-lib/aws-lambda';
+import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
+import {PolicyStatement} from 'aws-cdk-lib/aws-iam';
+import {LogGroup, RetentionDays} from 'aws-cdk-lib/aws-logs';
 
 const AWS_ACCOUNT_ID = process.env.AWS_ACCOUNT_ID ?? '';
 const AWS_REGION = process.env.AWS_REGION ?? '';
@@ -31,14 +31,18 @@ function createEndpoint(scope: Construct, functionName: string) {
       retention: RetentionDays.ONE_DAY,
       removalPolicy: RemovalPolicy.DESTROY,
     }),
-    environment: { DSQL_CLUSTER_ENDPOINT }
+    environment: {DSQL_CLUSTER_ENDPOINT},
   });
-  endpointFunction.addToRolePolicy(new PolicyStatement({
-    actions: ['dsql:*'],
-    resources: [`arn:aws:dsql:${AWS_REGION}:${AWS_ACCOUNT_ID}:cluster/${DSQL_CLUSTER_ID}`],
-  }));
-  const { url } = endpointFunction.addFunctionUrl({
-    authType: FunctionUrlAuthType.NONE
-  })
-  new CfnOutput(scope, `${functionName}UrlOutput`, { value: url });
+  endpointFunction.addToRolePolicy(
+    new PolicyStatement({
+      actions: ['dsql:*'],
+      resources: [
+        `arn:aws:dsql:${AWS_REGION}:${AWS_ACCOUNT_ID}:cluster/${DSQL_CLUSTER_ID}`,
+      ],
+    }),
+  );
+  const {url} = endpointFunction.addFunctionUrl({
+    authType: FunctionUrlAuthType.NONE,
+  });
+  new CfnOutput(scope, `${functionName}UrlOutput`, {value: url});
 }

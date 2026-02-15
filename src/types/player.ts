@@ -1,6 +1,6 @@
 type Player = {
-  id: string,
-  username: string,
+  id: string;
+  username: string;
 };
 
-export type { Player };
+export type {Player};
