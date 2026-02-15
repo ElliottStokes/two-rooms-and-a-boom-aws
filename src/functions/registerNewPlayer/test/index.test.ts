@@ -21,8 +21,8 @@ describe('registerNewPlayer', () => {
     const mockUserId = randomUUID();
 
     beforeEach(() => {
-      jest.mocked(checkExistingCredentials).mockReturnValue(null);
-      jest.mocked(createNewPlayer).mockReturnValue({ id: mockUserId, username: TEST_USERNAME })
+      jest.mocked(checkExistingCredentials).mockResolvedValue(null);
+      jest.mocked(createNewPlayer).mockResolvedValue({ id: mockUserId, username: TEST_USERNAME })
     });
 
     it('should return status code 201', async () => {
@@ -43,7 +43,7 @@ describe('registerNewPlayer', () => {
     const mockUserId = randomUUID();
 
     beforeEach(() => {
-      jest.mocked(checkExistingCredentials).mockReturnValue({ id: mockUserId, username: TEST_USERNAME })
+      jest.mocked(checkExistingCredentials).mockResolvedValue({ id: mockUserId, username: TEST_USERNAME })
     });
 
     it('should return status code 200', async () => {
