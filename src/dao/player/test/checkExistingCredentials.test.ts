@@ -17,13 +17,13 @@ describe('checkExistingCredentials', () => {
     CLIENT_MOCK.query.mockReturnValue({});
     await checkExistingCredentials(TEST_USERNAME);
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      `SELECT playerId FROM two_rooms_and_a_boom.player WHERE username = ${TEST_USERNAME};`
+      'SELECT playerid FROM two_rooms_and_a_boom.player WHERE username = $1;', [TEST_USERNAME]
     );
   });
 
   it('should return player ID from matched row', async () => {
     const mockPlayerId = randomUUID();
-    CLIENT_MOCK.query.mockReturnValue({ rowCount: 1, rows: [{ playerId: mockPlayerId }]});
+    CLIENT_MOCK.query.mockReturnValue({ rowCount: 1, rows: [{ playerid: mockPlayerId }]});
     const result = await checkExistingCredentials(TEST_USERNAME);
     expect(result).toStrictEqual({ id: mockPlayerId, username: TEST_USERNAME });
   });

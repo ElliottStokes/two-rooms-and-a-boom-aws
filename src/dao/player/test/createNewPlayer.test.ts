@@ -17,20 +17,20 @@ describe('createNewPlayer', () => {
   beforeEach(() => {
     CLIENT_MOCK.query
       .mockReturnValueOnce({})
-      .mockReturnValueOnce({ rowCount: 1, rows: [{playerId: mockPlayerId }] });
+      .mockReturnValueOnce({ rowCount: 1, rows: [{playerid: mockPlayerId }] });
   });
 
   it('should call client with create new player statement', async () => {
     await createNewPlayer(TEST_USERNAME);
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      `INSERT INTO two_rooms_and_a_boom.player (username) VALUES (${TEST_USERNAME});`
+      'INSERT INTO two_rooms_and_a_boom.player (username) VALUES ($1);', [TEST_USERNAME]
     );
   });
 
   it('should call client with fetch player statement', async () => {
     await createNewPlayer(TEST_USERNAME);
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      `SELECT playerId FROM two_rooms_and_a_boom.player WHERE username = ${TEST_USERNAME};`
+      'SELECT playerid FROM two_rooms_and_a_boom.player WHERE username = $1;', [TEST_USERNAME]
     );
   });
 
