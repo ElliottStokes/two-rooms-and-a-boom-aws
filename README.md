@@ -10,8 +10,12 @@ npm 11.9.0
 ## Deployment
 
 ### Prerequisites
-* run `cdk bootstrap` to bootstrap your AWS account
+
+When deploying to a completely new project to an AWS account, run `cdk bootstrap` to bootstrap your AWS account.
+
 * Need to export values in the environment variable in order to deploy
+  * AWS_ACCOUNT_ID: found in the AWS console at the top right of the page
+  * AWS_REGION: AWS region you would like to deploy to
   * DSQL_CLUSTER_ID: found on AWS console, go to Aurora DSQL > Clusters and copy Cluster ID
   * DSQL_CLUSTER_ENDPOINT: found on AWS console, go to Aurora DSQL > Clusters and copy Endpoint
 
