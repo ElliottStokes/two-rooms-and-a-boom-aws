@@ -1,5 +1,5 @@
-import { DsqlSigner } from '@aws-sdk/dsql-signer';
-import { Client } from 'pg';
+import {DsqlSigner} from '@aws-sdk/dsql-signer';
+import {Client} from 'pg';
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const DSQL_CLUSTER_ENDPOINT = process.env.DSQL_CLUSTER_ENDPOINT ?? '';
@@ -10,7 +10,7 @@ async function getClient() {
   if (!client) {
     const signer = new DsqlSigner({
       hostname: DSQL_CLUSTER_ENDPOINT,
-      region: AWS_REGION
+      region: AWS_REGION,
     });
     const token = await signer.getDbConnectAdminAuthToken();
     client = new Client({
@@ -26,4 +26,4 @@ async function getClient() {
   return client;
 }
 
-export { getClient };
+export {getClient};

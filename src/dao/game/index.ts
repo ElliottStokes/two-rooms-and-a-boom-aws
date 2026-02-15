@@ -1,2 +1,2 @@
-export { resetActiveCards } from './resetActiveCards';
-export { setActiveCards } from './setActiveCards';
+export {resetActiveCards} from './resetActiveCards';
+export {setActiveCards} from './setActiveCards';

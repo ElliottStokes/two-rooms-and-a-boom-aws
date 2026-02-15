@@ -1,7 +1,7 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
+import {APIGatewayProxyEvent} from 'aws-lambda';
 
-import { handler } from '..'
-import { resetActiveCards, setActiveCards } from '../../../dao';
+import {handler} from '..';
+import {resetActiveCards, setActiveCards} from '../../../dao';
 
 jest.mock('../../../dao', () => ({
   resetActiveCards: jest.fn(),
@@ -16,7 +16,7 @@ const MOCK_API_GATEWAY_PROXY_EVENT = {
 
 describe('setActiveCards', () => {
   it('should return statusCode 204 on successful run', async () => {
-    const { statusCode } = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
+    const {statusCode} = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(statusCode).toEqual(204);
   });
 
@@ -27,7 +27,11 @@ describe('setActiveCards', () => {
 
   it('should call setActiveCards dao function with activeCardNames list', async () => {
     await handler(MOCK_API_GATEWAY_PROXY_EVENT);
-    expect(setActiveCards).toHaveBeenCalledWith(['cardOne', 'cardTwo', 'cardThree']);
+    expect(setActiveCards).toHaveBeenCalledWith([
+      'cardOne',
+      'cardTwo',
+      'cardThree',
+    ]);
   });
 
   it('should return 400 error response when request is missing body', async () => {
@@ -50,16 +54,20 @@ describe('setActiveCards', () => {
   });
 
   it('should return 500 error response when resetActiveCards throws an error', async () => {
-    jest.mocked(resetActiveCards).mockRejectedValue(new Error('Error resetting active cards'));
+    jest
+      .mocked(resetActiveCards)
+      .mockRejectedValue(new Error('Error resetting active cards'));
     const response = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(response).toStrictEqual({
       statusCode: 500,
       body: 'Something went wrong',
-    })
+    });
   });
 
   it('should return 500 error response when setActiveCards throws an error', async () => {
-    jest.mocked(setActiveCards).mockRejectedValue(new Error('Error setting active cards'));
+    jest
+      .mocked(setActiveCards)
+      .mockRejectedValue(new Error('Error setting active cards'));
     const response = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(response).toStrictEqual({
       statusCode: 500,
