@@ -16,6 +16,7 @@ export class TwoRoomsAndABoomStack extends Stack {
 
     createEndpoint(this, 'setActiveCards');
     createEndpoint(this, 'clearActiveCards');
+    createEndpoint(this, 'registerNewPlayer');
   }
 }
 
@@ -33,7 +34,7 @@ function createEndpoint(scope: Construct, functionName: string) {
     environment: { DSQL_CLUSTER_ENDPOINT }
   });
   endpointFunction.addToRolePolicy(new PolicyStatement({
-    actions: ['dsql:DbConnectAdmin'],
+    actions: ['dsql:*'],
     resources: [`arn:aws:dsql:${AWS_REGION}:${AWS_ACCOUNT_ID}:cluster/${DSQL_CLUSTER_ID}`],
   }));
   const { url } = endpointFunction.addFunctionUrl({
