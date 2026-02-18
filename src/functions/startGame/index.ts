@@ -1,9 +1,14 @@
-import {getActiveCards, listAllPlayers} from '../../dao';
+import {getGameId, startGame} from '../../dao';
 
 async function handler() {
-  const players = await listAllPlayers();
-  const cards = await getActiveCards();
-  return {statusCode: 200, body: {players, cards}};
+  const gameId = await getGameId();
+
+  if (gameId === null) {
+    return {statusCode: 428, body: 'Game has not been created yet'};
+  }
+
+  await startGame(gameId);
+  return {statusCode: 200};
 }
 
 export {handler};

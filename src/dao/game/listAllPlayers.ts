@@ -1,8 +1,8 @@
 import {getClient} from '../client';
 
-type ListAllPlayers = {playerid: string; username: string};
+type Player = {playerid: string; username: string};
 
-async function listAllPlayers(): Promise<ListAllPlayers[]> {
+async function listAllPlayers(): Promise<Player[]> {
   const client = await getClient();
   const result = await client.query(
     'SELECT playerid, username FROM two_rooms_and_a_boom.player;',

@@ -7,20 +7,24 @@ type ActiveCard = {
   teamid: string;
 };
 
+const BASIC_CARDS = ['Red Team', 'Blue Team'];
+
 async function getActiveCards(): Promise<{
   basicCards: ActiveCard[];
-  specialCards: ActiveCard[];
+  uniqueCards: ActiveCard[];
 }> {
   const client = await getClient();
   const {rows: activeCards} = await client.query(
-    'SELECT cardid, cardtitle, isbasic, teamid FROM two_rooms_and_a_boom.card WHERE isactive = TRUE;',
+    'SELECT cardid, cardtitle, teamid FROM two_rooms_and_a_boom.card WHERE isactive = TRUE;',
   );
   const basicCards: ActiveCard[] = [];
-  const specialCards: ActiveCard[] = [];
+  const uniqueCards: ActiveCard[] = [];
   activeCards.forEach(card =>
-    card.isbasic ? basicCards.push(card) : specialCards.push(card),
+    BASIC_CARDS.includes(card.cardtitle)
+      ? basicCards.push(card)
+      : uniqueCards.push(card),
   );
-  return {basicCards, specialCards};
+  return {basicCards, uniqueCards};
 }
 
 export {getActiveCards};
