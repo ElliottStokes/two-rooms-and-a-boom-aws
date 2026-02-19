@@ -3,7 +3,6 @@ import {getClient} from '../client';
 type ActiveCard = {
   cardid: string;
   cardtitle: string;
-  isbasic: boolean;
   teamid: string;
 };
 

@@ -15,7 +15,7 @@ async function assignPlayers(players: Player[], gameId: string) {
     )
     .join(', ');
   await client.query(
-    `INSERT INTO two_rooms_and_a_boom.game (playerid, cardid, room, gameid) VALUES ${formattedPlayers}`,
+    `INSERT INTO two_rooms_and_a_boom.game (playerid, cardid, room, gameid) VALUES ${formattedPlayers};`,
   );
   return;
 }

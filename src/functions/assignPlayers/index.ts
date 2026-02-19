@@ -51,10 +51,7 @@ async function handler() {
   }
 
   await assignPlayers(assignedPlayers, gameId);
-  return {
-    statusCode: 200,
-    body: {players: assignedPlayers, cards: {basicCards, uniqueCards}},
-  };
+  return {statusCode: 204};
 }
 
 function assignRoom() {

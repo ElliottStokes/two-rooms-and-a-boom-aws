@@ -23,7 +23,7 @@ describe('getActiveCards', () => {
   it('should call Client with query function', async () => {
     await getActiveCards();
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      'SELECT cardid, cardtitle, isbasic, teamid FROM two_rooms_and_a_boom.card WHERE isactive = TRUE;',
+      'SELECT cardid, cardtitle, teamid FROM two_rooms_and_a_boom.card WHERE isactive = TRUE;',
     );
   });
 
@@ -33,27 +33,23 @@ describe('getActiveCards', () => {
         rows: [
           {
             cardid: 'abc-123',
-            cardtitle: 'test-card-1',
+            cardtitle: 'Blue Team',
             teamid: 'team-1',
-            isbasic: true,
           },
           {
             cardid: 'def-456',
             cardtitle: 'test-card-2',
             teamid: 'team-1',
-            isbasic: false,
           },
           {
             cardid: 'ghi-789',
             cardtitle: 'test-card-3',
             teamid: 'team-2',
-            isbasic: false,
           },
           {
             cardid: 'jkl-135',
-            cardtitle: 'test-card-4',
+            cardtitle: 'Red Team',
             teamid: 'team-2',
-            isbasic: true,
           },
         ],
       });
@@ -64,33 +60,29 @@ describe('getActiveCards', () => {
       expect(basicCards).toStrictEqual([
         {
           cardid: 'abc-123',
-          cardtitle: 'test-card-1',
+          cardtitle: 'Blue Team',
           teamid: 'team-1',
-          isbasic: true,
         },
         {
           cardid: 'jkl-135',
-          cardtitle: 'test-card-4',
+          cardtitle: 'Red Team',
           teamid: 'team-2',
-          isbasic: true,
         },
       ]);
     });
 
-    it('should put special cards into specialCards prop', async () => {
-      const {specialCards} = await getActiveCards();
-      expect(specialCards).toStrictEqual([
+    it('should put unique cards into uniqueCards prop', async () => {
+      const {uniqueCards} = await getActiveCards();
+      expect(uniqueCards).toStrictEqual([
         {
           cardid: 'def-456',
           cardtitle: 'test-card-2',
           teamid: 'team-1',
-          isbasic: false,
         },
         {
           cardid: 'ghi-789',
           cardtitle: 'test-card-3',
           teamid: 'team-2',
-          isbasic: false,
         },
       ]);
     });
