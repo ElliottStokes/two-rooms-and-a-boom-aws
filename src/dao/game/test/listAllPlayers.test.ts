@@ -23,7 +23,7 @@ describe('listAllPlayers', () => {
   it('should call Client with query function', async () => {
     await listAllPlayers();
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      'SELECT playerid, username FROM two_rooms_and_a_boom.player;',
+      'SELECT playerid as id, username FROM two_rooms_and_a_boom.player;',
     );
   });
 
