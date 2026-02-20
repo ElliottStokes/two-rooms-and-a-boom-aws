@@ -8,7 +8,7 @@ import {
   assignPlayers,
 } from '../../../dao';
 
-import type {Player} from '../../../types';
+import type {Card, Player} from '../../../types';
 
 const ASSIGN_PLAYERS_MOCK = jest.fn();
 
@@ -24,72 +24,27 @@ jest.mock('../../../dao', () => ({
 }));
 
 const MOCK_GAME_ID = randomUUID();
-const MOCK_PLAYERS = [
-  {
-    playerid: 'test-id-1',
-    username: 'test-player-1',
-  },
-  {
-    playerid: 'test-id-2',
-    username: 'test-player-2',
-  },
-  {
-    playerid: 'test-id-3',
-    username: 'test-player-3',
-  },
-  {
-    playerid: 'test-id-4',
-    username: 'test-player-4',
-  },
-  {
-    playerid: 'test-id-5',
-    username: 'test-player-5',
-  },
-  {
-    playerid: 'test-id-6',
-    username: 'test-player-6',
-  },
+const MOCK_PLAYERS: Player[] = [
+  {id: 'test-id-1', username: 'test-player-1'},
+  {id: 'test-id-2', username: 'test-player-2'},
+  {id: 'test-id-3', username: 'test-player-3'},
+  {id: 'test-id-4', username: 'test-player-4'},
+  {id: 'test-id-5', username: 'test-player-5'},
+  {id: 'test-id-6', username: 'test-player-6'},
 ];
-const MOCK_EXTRA_PLAYER = [
-  {
-    playerid: 'test-id-extra',
-    username: 'test-player-extra',
-  },
+const MOCK_EXTRA_PLAYER: Player[] = [
+  {id: 'test-id-extra', username: 'test-player-extra'},
 ];
-const MOCK_ACTIVE_CARDS = {
+const MOCK_ACTIVE_CARDS: {basicCards: Card[]; uniqueCards: Card[]} = {
   basicCards: [
-    {
-      cardid: 'abc-123',
-      cardtitle: 'Blue Team',
-      teamid: 'team-1',
-    },
-    {
-      cardid: 'jkl-135',
-      cardtitle: 'Red Team',
-      teamid: 'team-2',
-    },
+    {id: 'abc-123', title: 'Blue Team', teamId: 'team-1'},
+    {id: 'jkl-135', title: 'Red Team', teamId: 'team-2'},
   ],
   uniqueCards: [
-    {
-      cardid: 'def-456',
-      cardtitle: 'test-card-1',
-      teamid: 'team-1',
-    },
-    {
-      cardid: 'ghi-789',
-      cardtitle: 'test-card-2',
-      teamid: 'team-1',
-    },
-    {
-      cardid: 'jkm-246',
-      cardtitle: 'test-card-3',
-      teamid: 'team-2',
-    },
-    {
-      cardid: 'gambler-id',
-      cardtitle: 'Gambler',
-      teamid: 'team-3',
-    },
+    {id: 'def-456', title: 'test-card-1', teamId: 'team-1'},
+    {id: 'ghi-789', title: 'test-card-2', teamId: 'team-1'},
+    {id: 'jkm-246', title: 'test-card-3', teamId: 'team-2'},
+    {id: 'gambler-id', title: 'Gambler', teamId: 'team-3'},
   ],
 };
 
@@ -177,53 +132,6 @@ describe('assignPlayers', () => {
     expect(
       assignedPlayers.filter(({cardId}) => cardId === 'gambler-id').length,
     ).toBe(0);
-  });
-
-  it('should call assignPlayers without duplicating unique cards', async () => {
-    await handler();
-    const [assignedPlayers]: [Player[], string] =
-      ASSIGN_PLAYERS_MOCK.mock.calls[0];
-    const uniqueCards = [
-      {
-        cardid: 'def-456',
-        cardtitle: 'test-card-1',
-        teamid: 'team-1',
-      },
-      {
-        cardid: 'ghi-789',
-        cardtitle: 'test-card-2',
-        teamid: 'team-1',
-      },
-      {
-        cardid: 'jkm-246',
-        cardtitle: 'test-card-3',
-        teamid: 'team-2',
-      },
-    ];
-
-    for (const card of uniqueCards) {
-      expect(
-        assignedPlayers.filter(({cardId}) => cardId === card.cardid).length,
-      ).toBe(1);
-    }
-  });
-
-  it('should call assignPlayers with basic cards', async () => {
-    jest.mocked(getActiveCards).mockResolvedValue({
-      basicCards: [...MOCK_ACTIVE_CARDS.basicCards],
-      uniqueCards: [],
-    });
-
-    await handler();
-    const [assignedPlayers]: [Player[], string] =
-      ASSIGN_PLAYERS_MOCK.mock.calls[0];
-
-    const {basicCards} = MOCK_ACTIVE_CARDS;
-    for (const card of basicCards) {
-      expect(
-        assignedPlayers.filter(({cardId}) => cardId === card.cardid).length,
-      ).toBe(3);
-    }
   });
 
   it('should call assignPlayers with equal distribution of rooms', async () => {

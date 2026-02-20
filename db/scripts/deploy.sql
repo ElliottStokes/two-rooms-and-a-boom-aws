@@ -108,7 +108,7 @@ INSERT INTO two_rooms_and_a_boom.card (cardTitle, teamId, fileName) VALUES
 ('Paranoid', 'ef7f63f7-176b-4ff2-9fc9-4c01b2396baf', 'Paranoid.png'),
 ('Private Eye', '8c9ccb7d-81e7-4129-b1d9-f806d10ddeb6', 'PrivateEye.png'),
 ('Psychologist', 'c10f2b88-7a2a-4a50-aade-7f96bde85215', 'Psychologist.png'),
-('Psychlologist', 'ef7f63f7-176b-4ff2-9fc9-4c01b2396baf', 'Psychologist.png'),
+('Psychologist', 'ef7f63f7-176b-4ff2-9fc9-4c01b2396baf', 'Psychologist.png'),
 ('Rival', '8c9ccb7d-81e7-4129-b1d9-f806d10ddeb6', 'Rival.png'),
 ('Survivor', '8c9ccb7d-81e7-4129-b1d9-f806d10ddeb6', 'Survivor.png'),
 ('Robot', '8c9ccb7d-81e7-4129-b1d9-f806d10ddeb6', 'Robot.png'),
