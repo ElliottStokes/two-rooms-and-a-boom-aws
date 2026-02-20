@@ -13,6 +13,11 @@ node: 22.x
 
 ### Prerequisites
 
+requires `aws-cdk` to be installed:
+```
+npm install -g aws-cdk
+```
+
 When deploying to a completely new project to an AWS account, run `cdk bootstrap` to bootstrap your AWS account.
 
 * Need to export values in the environment variable in order to deploy
