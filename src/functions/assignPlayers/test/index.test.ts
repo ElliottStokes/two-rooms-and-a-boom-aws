@@ -100,6 +100,32 @@ describe('assignPlayers', () => {
     expect(getActiveCards).toHaveBeenCalledTimes(1);
   });
 
+  describe('when there are more active cards than players', () => {
+    beforeEach(() => {
+      jest
+        .mocked(listAllPlayers)
+        .mockResolvedValue([MOCK_PLAYERS[0], MOCK_PLAYERS[1]]);
+      jest.mocked(getActiveCards).mockResolvedValue({
+        basicCards: [...MOCK_ACTIVE_CARDS.basicCards],
+        uniqueCards: [
+          MOCK_ACTIVE_CARDS.uniqueCards[0],
+          MOCK_ACTIVE_CARDS.uniqueCards[1],
+          MOCK_ACTIVE_CARDS.uniqueCards[2],
+        ],
+      });
+    });
+
+    it('should return a 422 status code', async () => {
+      const {statusCode} = await handler();
+      expect(statusCode).toBe(422);
+    });
+
+    it('should not call assignPlayers dao function', async () => {
+      await handler();
+      expect(assignPlayers).toHaveBeenCalledTimes(0);
+    });
+  });
+
   it('should call assignPlayers dao function once', async () => {
     await handler();
     expect(assignPlayers).toHaveBeenCalledTimes(1);

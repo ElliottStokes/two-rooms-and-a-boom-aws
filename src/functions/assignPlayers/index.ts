@@ -24,6 +24,16 @@ async function handler() {
     uniqueCards.splice(gamblerIndex, 1);
   }
 
+  if (uniqueCards.length > unassignedPlayers.length) {
+    return {
+      statusCode: 422,
+      body:
+        'more unique cards assigned than there are players.' +
+        'This is a known issue and will be resolved in ' +
+        'www.github.com/ElliottStokes/two-rooms-and-a-boom-aws/issues/31',
+    };
+  }
+
   const assignedPlayers = dealCards(unassignedPlayers, uniqueCards, basicCards);
   assignedPlayers.forEach(player => (player.room = assignRoom()));
   await assignPlayers(assignedPlayers, gameId);
