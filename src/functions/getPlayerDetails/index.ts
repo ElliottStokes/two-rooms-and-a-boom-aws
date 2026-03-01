@@ -11,7 +11,7 @@ async function handler({
   const playerDetails = await getPlayerDetails(playerId);
 
   if (playerDetails === null) {
-    return {statusCode: 428, body: 'Player does not exist'};
+    return {statusCode: 404, body: 'Player does not exist'};
   }
 
   return {statusCode: 200, body: playerDetails};

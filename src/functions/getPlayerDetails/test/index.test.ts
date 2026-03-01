@@ -41,9 +41,9 @@ describe('getPlayerDetails', () => {
     expect(statusCode).toBe(200);
   });
 
-  it('should return statusCode 428 when no player is found', async () => {
+  it('should return statusCode 404 when no player is found', async () => {
     jest.mocked(getPlayerDetails).mockResolvedValue(null);
     const {statusCode} = await handler(MOCK_REQUEST_EVENT);
-    expect(statusCode).toBe(428);
+    expect(statusCode).toBe(404);
   });
 });
