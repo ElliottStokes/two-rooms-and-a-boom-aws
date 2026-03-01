@@ -21,6 +21,7 @@ export class TwoRoomsAndABoomStack extends Stack {
     createEndpoint(this, 'assignPlayers');
     createEndpoint(this, 'startGame');
     createEndpoint(this, 'endGame');
+    createEndpoint(this, 'getPlayerDetails');
   }
 }
 
