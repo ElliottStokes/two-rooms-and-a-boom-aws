@@ -20,6 +20,7 @@ export class TwoRoomsAndABoomStack extends Stack {
     createEndpoint(this, 'listAllPlayers');
     createEndpoint(this, 'assignPlayers');
     createEndpoint(this, 'startGame');
+    createEndpoint(this, 'endGame');
   }
 }
 
