@@ -12,4 +12,4 @@ coverage
 cdk.out
 
 # Environment variables
-environmentVariables.env
+.env

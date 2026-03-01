@@ -20,11 +20,22 @@ npm install -g aws-cdk
 
 When deploying to a completely new project to an AWS account, run `cdk bootstrap` to bootstrap your AWS account.
 
-* Need to export values in the environment variable in order to deploy
-  * AWS_ACCOUNT_ID: found in the AWS console at the top right of the page
-  * AWS_REGION: AWS region you would like to deploy to
-  * DSQL_CLUSTER_ID: found on AWS console, go to Aurora DSQL > Clusters and copy Cluster ID
-  * DSQL_CLUSTER_ENDPOINT: found on AWS console, go to Aurora DSQL > Clusters and copy Endpoint
+DSQL database can be deployed using [DB docs](./db/README.md)
+
+Need to export values in the environment variable in order to deploy
+  * **AWS_ACCOUNT_ID**: found in the AWS console at the top right of the page
+  * **AWS_REGION**: AWS region you would like to deploy to
+  * **DSQL_CLUSTER_ID**: found on AWS CLI using command `aws dsql list-clusters` or AWS console, go to Aurora DSQL > Clusters and copy Cluster ID
+  * **DSQL_CLUSTER_ENDPOINT**: created using the cluster ID followed by `.dsql.eu-west-2.on.aws` or found on AWS console, go to Aurora DSQL > Clusters and copy Endpoint
+
+Create a .env file and store the values in a key value pair (e.g. `AWS_REGION=eu-west-2`). Then run the following command:
+```
+export $(cat .env | xargs)
+```
+
+---
+
+### Commands
 
 To deploy run:
 ```
