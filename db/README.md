@@ -8,6 +8,14 @@ Clusters > Create cluster > Single-Region
 
 name: `two-rooms-and-a-boom-dsql-cluster`
 
+## AWS CLI
+
+DSQL dev cluster:
+
+```
+aws dsql create-cluster --no-deletion-protection-enabled --region eu-west-2 --tags Name=two-rooms-and-a-boom-dsql-cluster
+```
+
 ## Testing
 
 ### Postgres scripts
