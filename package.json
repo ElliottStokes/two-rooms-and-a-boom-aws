@@ -31,7 +31,9 @@
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^2.24.1",
-    "@aws-sdk/dsql-signer": "^3.863.0",
+    "@aws-sdk/client-s3": "^3.1000.0",
+    "@aws-sdk/dsql-signer": "^3.1000.0",
+    "@aws-sdk/s3-request-presigner": "^3.1000.0",
     "aws-cdk-lib": "2.237.1",
     "constructs": "^10.0.0",
     "pg": "^8.16.3"
