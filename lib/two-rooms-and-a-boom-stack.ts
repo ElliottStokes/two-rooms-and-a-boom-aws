@@ -22,6 +22,14 @@ export class TwoRoomsAndABoomStack extends Stack {
     createEndpoint(this, 'startGame');
     createEndpoint(this, 'endGame');
     createEndpoint(this, 'getPlayerDetails');
+
+    const getCardImageFunction = createEndpoint(this, 'getCardImageUrl');
+    getCardImageFunction.addToRolePolicy(
+      new PolicyStatement({
+        actions: ['s3:GetObject'],
+        resources: ['arn:aws:s3:::two-rooms-and-a-boom/cards/*'],
+      }),
+    );
   }
 }
 
@@ -50,4 +58,5 @@ function createEndpoint(scope: Construct, functionName: string) {
     authType: FunctionUrlAuthType.NONE,
   });
   new CfnOutput(scope, `${functionName}UrlOutput`, {value: url});
+  return endpointFunction;
 }

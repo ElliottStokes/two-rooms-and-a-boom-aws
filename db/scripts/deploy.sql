@@ -19,6 +19,8 @@ CREATE TABLE two_rooms_and_a_boom.player (
 CREATE TABLE two_rooms_and_a_boom.card (
     cardId UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     cardTitle VARCHAR(45) NOT NULL,
+    url TEXT NULL,
+    urlExpiry TIMESTAMP NULL,
     isActive BOOLEAN NOT NULL DEFAULT false,
     isBasic BOOLEAN NOT NULL DEFAULT false,
     fileName VARCHAR(45) NOT NULL,
