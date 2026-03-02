@@ -22,6 +22,7 @@ export class TwoRoomsAndABoomStack extends Stack {
     createEndpoint(this, 'startGame');
     createEndpoint(this, 'endGame');
     createEndpoint(this, 'getPlayerDetails');
+    createEndpoint(this, 'deletePlayer');
 
     const getCardImageFunction = createEndpoint(this, 'getCardImageUrl');
     getCardImageFunction.addToRolePolicy(
