@@ -19,7 +19,7 @@ describe('deletePlayer', () => {
   it('should call client with get player details statement', async () => {
     await deletePlayer(MOCK_PLAYER_ID);
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      'DELETE FROM two_rooms_and_a_boom.player g WHERE g.playerid = $1',
+      'DELETE FROM two_rooms_and_a_boom.player WHERE playerid = $1',
       [MOCK_PLAYER_ID],
     );
   });
