@@ -3,7 +3,7 @@ import {getClient} from '../client';
 async function deletePlayer(playerId: string): Promise<boolean> {
   const client = await getClient();
   const result = await client.query(
-    'DELETE FROM two_rooms_and_a_boom.player g WHERE g.playerid = $1',
+    'DELETE FROM two_rooms_and_a_boom.player WHERE playerid = $1',
     [playerId],
   );
   console.log({...result});

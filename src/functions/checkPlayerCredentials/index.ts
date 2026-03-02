@@ -1,5 +1,5 @@
 import {APIGatewayProxyEvent} from 'aws-lambda';
-import {checkExistingCredentials, createNewPlayer} from '../../dao';
+import {checkExistingCredentials} from '../../dao';
 
 async function handler({body}: APIGatewayProxyEvent) {
   if (!body) {
@@ -9,11 +9,9 @@ async function handler({body}: APIGatewayProxyEvent) {
   const {username} = JSON.parse(body);
   const existingPlayer = await checkExistingCredentials(username);
   if (existingPlayer) {
-    return {statusCode: 409, body: 'player with that username already exists'};
+    return {statusCode: 200, body: JSON.stringify(existingPlayer)};
   }
-
-  const newPlayer = await createNewPlayer(username);
-  return {statusCode: 201, body: JSON.stringify(newPlayer)};
+  return {statusCode: 404, body: 'Player does not exist'};
 }
 
 export {handler};
