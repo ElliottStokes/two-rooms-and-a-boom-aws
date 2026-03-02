@@ -1,11 +1,11 @@
 import {randomUUID} from 'crypto';
 
 import {handler} from '..';
-import {checkExistingCredentials, createNewPlayer} from '../../../dao/player';
+import {checkExistingCredentials, createNewPlayer} from '../../../dao';
 
 import type {APIGatewayProxyEvent} from 'aws-lambda';
 
-jest.mock('../../../dao/player', () => ({
+jest.mock('../../../dao', () => ({
   checkExistingCredentials: jest.fn(),
   createNewPlayer: jest.fn(),
 }));
@@ -41,7 +41,7 @@ describe('registerNewPlayer', () => {
     });
   });
 
-  describe('when returning existing player credentials', () => {
+  describe('when player with username already exists', () => {
     const mockUserId = randomUUID();
 
     beforeEach(() => {
@@ -50,17 +50,9 @@ describe('registerNewPlayer', () => {
         .mockResolvedValue({id: mockUserId, username: TEST_USERNAME});
     });
 
-    it('should return status code 200', async () => {
+    it('should return status code 409', async () => {
       const {statusCode} = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
-      expect(statusCode).toStrictEqual(200);
-    });
-
-    it('should return existing user details', async () => {
-      const {body} = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
-      expect(JSON.parse(body)).toStrictEqual({
-        id: mockUserId,
-        username: TEST_USERNAME,
-      });
+      expect(statusCode).toStrictEqual(409);
     });
   });
 });
