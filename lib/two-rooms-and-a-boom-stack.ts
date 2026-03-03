@@ -1,9 +1,10 @@
 import {CfnOutput, RemovalPolicy, Stack, StackProps} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
-import {Runtime, FunctionUrlAuthType} from 'aws-cdk-lib/aws-lambda';
+import {Runtime} from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import {PolicyStatement} from 'aws-cdk-lib/aws-iam';
 import {LogGroup, RetentionDays} from 'aws-cdk-lib/aws-logs';
+import {LambdaIntegration, RestApi} from 'aws-cdk-lib/aws-apigateway';
 
 const AWS_ACCOUNT_ID = process.env.AWS_ACCOUNT_ID ?? '';
 const AWS_REGION = process.env.AWS_REGION ?? '';
@@ -14,28 +15,67 @@ export class TwoRoomsAndABoomStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    createEndpoint(this, 'setActiveCards');
-    createEndpoint(this, 'clearActiveCards');
-    createEndpoint(this, 'registerNewPlayer');
-    createEndpoint(this, 'listAllPlayers');
-    createEndpoint(this, 'assignPlayers');
-    createEndpoint(this, 'startGame');
-    createEndpoint(this, 'endGame');
-    createEndpoint(this, 'getPlayerDetails');
-    createEndpoint(this, 'deletePlayer');
-    createEndpoint(this, 'checkPlayerCredentials');
+    const restApi = new RestApi(this, 'two-rooms-and-a-boom-api-gateway');
+    const playerPath = restApi.root.addResource('player');
+    playerPath
+      .addResource('all')
+      .addMethod('GET', createEndpoint(this, 'listAllPlayers'));
+    playerPath
+      .addResource('check')
+      .addResource('{username}')
+      .addMethod('GET', createEndpoint(this, 'checkPlayerCredentials'));
+    playerPath.addMethod('POST', createEndpoint(this, 'registerNewPlayer'));
+    playerPath
+      .addResource('card')
+      .addResource('{cardId}')
+      .addMethod(
+        'GET',
+        createEndpoint(this, 'getCardImageUrl', [
+          new PolicyStatement({
+            actions: ['s3:GetObject'],
+            resources: ['arn:aws:s3:::two-rooms-and-a-boom/cards/*'],
+          }),
+        ]),
+      );
 
-    const getCardImageFunction = createEndpoint(this, 'getCardImageUrl');
-    getCardImageFunction.addToRolePolicy(
-      new PolicyStatement({
-        actions: ['s3:GetObject'],
-        resources: ['arn:aws:s3:::two-rooms-and-a-boom/cards/*'],
-      }),
+    const playerPathPlayerId = playerPath.addResource('{playerId}');
+    playerPathPlayerId.addMethod(
+      'GET',
+      createEndpoint(this, 'getPlayerDetails'),
     );
+    playerPathPlayerId.addMethod(
+      'DELETE',
+      createEndpoint(this, 'deletePlayer'),
+    );
+
+    const cardsPath = restApi.root.addResource('cards');
+    cardsPath
+      .addResource('set')
+      .addMethod('PATCH', createEndpoint(this, 'setActiveCards'));
+    cardsPath
+      .addResource('clear')
+      .addMethod('PATCH', createEndpoint(this, 'clearActiveCards'));
+    cardsPath
+      .addResource('deal')
+      .addMethod('PATCH', createEndpoint(this, 'assignPlayers'));
+
+    const gamePath = restApi.root.addResource('game');
+    gamePath
+      .addResource('start')
+      .addMethod('PATCH', createEndpoint(this, 'startGame'));
+    gamePath
+      .addResource('end')
+      .addMethod('PATCH', createEndpoint(this, 'endGame'));
+
+    new CfnOutput(this, 'ApiGatewayUrl', {value: restApi.url});
   }
 }
 
-function createEndpoint(scope: Construct, functionName: string) {
+function createEndpoint(
+  scope: Construct,
+  functionName: string,
+  permissions?: PolicyStatement[],
+) {
   const endpointFunction = new NodejsFunction(scope, functionName, {
     functionName,
     runtime: Runtime.NODEJS_22_X,
@@ -56,9 +96,10 @@ function createEndpoint(scope: Construct, functionName: string) {
       ],
     }),
   );
-  const {url} = endpointFunction.addFunctionUrl({
-    authType: FunctionUrlAuthType.NONE,
-  });
-  new CfnOutput(scope, `${functionName}UrlOutput`, {value: url});
-  return endpointFunction;
+  if (permissions) {
+    permissions.forEach(permission =>
+      endpointFunction.addToRolePolicy(permission),
+    );
+  }
+  return new LambdaIntegration(endpointFunction);
 }

@@ -1,18 +1,18 @@
 import {handler} from '..';
 import {deletePlayer} from '../../../dao';
 
+import type {APIGatewayProxyEvent} from 'aws-lambda';
+
 jest.mock('../../../dao', () => ({
   deletePlayer: jest.fn(),
 }));
 
 const MOCK_PLAYER_ID = '123-abc';
-const MOCK_REQUEST_EVENT = {
-  requestContext: {
-    http: {
-      path: `http://2468-qwerty.lambda-url.eu-west-2.on.aws/${MOCK_PLAYER_ID}`,
-    },
+const MOCK_REQUEST_EVENT: APIGatewayProxyEvent = {
+  pathParameters: {
+    playerId: MOCK_PLAYER_ID,
   },
-};
+} as unknown as APIGatewayProxyEvent;
 
 describe('deletePlayer', () => {
   beforeEach(() => {

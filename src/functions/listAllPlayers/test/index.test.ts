@@ -17,13 +17,13 @@ describe('clearActiveCards', () => {
 
   it('should return list of players on a successful run', async () => {
     const testPlayers = [
-      {playerid: 'abc-123', username: 'test-player-1'},
-      {playerid: 'def-456', username: 'test-player-2'},
-      {playerid: 'ghi-789', username: 'test-player-3'},
+      {id: 'abc-123', username: 'test-player-1'},
+      {id: 'def-456', username: 'test-player-2'},
+      {id: 'ghi-789', username: 'test-player-3'},
     ];
     jest.mocked(listAllPlayers).mockResolvedValue(testPlayers);
     const {body} = await handler();
-    expect(body).toStrictEqual({players: testPlayers});
+    expect(body).toStrictEqual(JSON.stringify(testPlayers));
   });
 
   it('should return statusCode 200 on a successful run', async () => {
