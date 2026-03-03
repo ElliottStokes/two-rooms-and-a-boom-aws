@@ -9,8 +9,8 @@ jest.mock('../../../dao', () => ({
 
 const TEST_USERNAME = 'test-user';
 const MOCK_USER_ID = '123-abc';
-const MOCK_API_GATEWAY_PROXY_EVENT = {
-  body: JSON.stringify({username: TEST_USERNAME}),
+const MOCK_API_GATEWAY_PROXY_EVENT: APIGatewayProxyEvent = {
+  pathParameters: {username: TEST_USERNAME},
 } as unknown as APIGatewayProxyEvent;
 
 describe('checkPlayerCredentials', () => {

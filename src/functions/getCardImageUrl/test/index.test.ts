@@ -2,6 +2,8 @@ import {handler} from '..';
 import {getCardUrl, setCardUrl} from '../../../dao';
 import {createPresignedUrl} from '../createPresignedUrl';
 
+import type {APIGatewayProxyEvent} from 'aws-lambda';
+
 jest.mock('../../../dao', () => ({
   getCardUrl: jest.fn(),
   setCardUrl: jest.fn(),
@@ -32,13 +34,9 @@ const MOCK_MISSING_CARD = {
   filename: 'missing-card.png',
 };
 const MOCK_CARD_ID = '123-card-abc';
-const MOCK_REQUEST_EVENT = {
-  requestContext: {
-    http: {
-      path: `http://2468-qwerty.lambda-url.eu-west-2.on.aws/${MOCK_CARD_ID}`,
-    },
-  },
-};
+const MOCK_REQUEST_EVENT: APIGatewayProxyEvent = {
+  pathParameters: {cardId: MOCK_CARD_ID},
+} as unknown as APIGatewayProxyEvent;
 const MOCK_PRESIGNED_URL = {
   presignedUrl: '',
   newExpiry: new Date(Date.now() + 3600000),
@@ -57,7 +55,7 @@ describe('getCard', () => {
 
     it('should return card image url on a successful run', async () => {
       const {body} = await handler(MOCK_REQUEST_EVENT);
-      expect(body).toStrictEqual({url: MOCK_ACTIVE_CARD.url});
+      expect(body).toStrictEqual(JSON.stringify({url: MOCK_ACTIVE_CARD.url}));
     });
 
     it('should return statusCode 200 on a successful run', async () => {
@@ -96,7 +94,9 @@ describe('getCard', () => {
 
     it('should return new presigned URL in response body', async () => {
       const {body} = await handler(MOCK_REQUEST_EVENT);
-      expect(body).toStrictEqual({url: MOCK_PRESIGNED_URL.presignedUrl});
+      expect(body).toStrictEqual(
+        JSON.stringify({url: MOCK_PRESIGNED_URL.presignedUrl}),
+      );
     });
 
     it('should return statusCode 200 in reponse', async () => {
@@ -135,7 +135,9 @@ describe('getCard', () => {
 
     it('should return new presigned URL in response body', async () => {
       const {body} = await handler(MOCK_REQUEST_EVENT);
-      expect(body).toStrictEqual({url: MOCK_PRESIGNED_URL.presignedUrl});
+      expect(body).toStrictEqual(
+        JSON.stringify({url: MOCK_PRESIGNED_URL.presignedUrl}),
+      );
     });
 
     it('should return statusCode 200 in reponse', async () => {
