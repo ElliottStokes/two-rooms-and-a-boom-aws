@@ -1,17 +1,22 @@
 import {getCardUrl, setCardUrl} from '../../dao';
 import {createPresignedUrl} from './createPresignedUrl';
 
+import type {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
+
 async function handler({
-  requestContext: {
-    http: {path},
-  },
-}: {
-  requestContext: {http: {path: string}};
-}) {
-  const cardId = path.substring(path.lastIndexOf('/') + 1);
+  pathParameters,
+}: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+  if (!pathParameters || !pathParameters.cardId) {
+    return {statusCode: 400, body: ''};
+  }
+  const {cardId} = pathParameters;
   const cardDetails = await getCardUrl(cardId);
   if (cardDetails === null) {
-    return {statusCode: 404, body: 'card not found'};
+    return {
+      statusCode: 404,
+      headers: {'Content-Type': 'text/plain'},
+      body: 'card not found',
+    };
   }
 
   const {url, expiry, filename, colour} = cardDetails;
@@ -21,9 +26,17 @@ async function handler({
       colour,
     );
     await setCardUrl(cardId, presignedUrl, newExpiry);
-    return {statusCode: 200, body: {url: presignedUrl}};
+    return {
+      statusCode: 200,
+      headers: {'Content-Type': 'text/json'},
+      body: JSON.stringify({url: presignedUrl}),
+    };
   }
-  return {statusCode: 200, body: {url}};
+  return {
+    statusCode: 200,
+    headers: {'Content-Type': 'text/json'},
+    body: JSON.stringify({url}),
+  };
 }
 
 export {handler};

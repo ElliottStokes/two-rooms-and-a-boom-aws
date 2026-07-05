@@ -1,8 +1,14 @@
 import {listAllPlayers} from '../../dao';
 
-async function handler() {
+import type {APIGatewayProxyResult} from 'aws-lambda';
+
+async function handler(): Promise<APIGatewayProxyResult> {
   const players = await listAllPlayers();
-  return {statusCode: 200, body: {players}};
+  return {
+    statusCode: 200,
+    headers: {'Content-Type': 'text/json'},
+    body: JSON.stringify(players),
+  };
 }
 
 export {handler};

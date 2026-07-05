@@ -13,3 +13,5 @@ cdk.out
 
 # Environment variables
 .env
+
+.DS_Store

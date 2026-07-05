@@ -6,14 +6,19 @@ import {
 } from '../../dao';
 import {dealCards} from './utils';
 
+import type {APIGatewayProxyResult} from 'aws-lambda';
 import type {Room} from '../../types';
 
 let NEXT_ROOM: Room = 'A';
 
-async function handler() {
+async function handler(): Promise<APIGatewayProxyResult> {
   const gameId = await getGameId();
   if (gameId === null) {
-    return {statusCode: 428, body: 'Game has not been created yet'};
+    return {
+      statusCode: 428,
+      headers: {'Content-Type': 'text/plain'},
+      body: 'Game has not been created yet',
+    };
   }
 
   const unassignedPlayers = await listAllPlayers();
@@ -27,6 +32,7 @@ async function handler() {
   if (uniqueCards.length > unassignedPlayers.length) {
     return {
       statusCode: 422,
+      headers: {'Content-Type': 'text/plain'},
       body:
         'more unique cards assigned than there are players.' +
         'This is a known issue and will be resolved in ' +
@@ -37,7 +43,7 @@ async function handler() {
   const assignedPlayers = dealCards(unassignedPlayers, uniqueCards, basicCards);
   assignedPlayers.forEach(player => (player.room = assignRoom()));
   await assignPlayers(assignedPlayers, gameId);
-  return {statusCode: 204};
+  return {statusCode: 204, body: ''};
 }
 
 function assignRoom() {

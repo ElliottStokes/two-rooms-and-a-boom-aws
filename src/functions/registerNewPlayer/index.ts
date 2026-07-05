@@ -1,19 +1,36 @@
-import {APIGatewayProxyEvent} from 'aws-lambda';
 import {checkExistingCredentials, createNewPlayer} from '../../dao';
 
-async function handler({body}: APIGatewayProxyEvent) {
+import {DEFAULT_CORS_HEADERS} from '../constants';
+
+import type {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
+
+async function handler({
+  body,
+}: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   if (!body) {
-    return {statusCode: 400, body: 'Missing body from request'};
+    return {
+      statusCode: 400,
+      headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
+      body: 'Missing body from request',
+    };
   }
 
   const {username} = JSON.parse(body);
   const existingPlayer = await checkExistingCredentials(username);
   if (existingPlayer) {
-    return {statusCode: 409, body: 'player with that username already exists'};
+    return {
+      statusCode: 409,
+      headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
+      body: 'player with that username already exists',
+    };
   }
 
   const newPlayer = await createNewPlayer(username);
-  return {statusCode: 201, body: JSON.stringify(newPlayer)};
+  return {
+    statusCode: 201,
+    headers: {'Content-Type': 'text/json', ...DEFAULT_CORS_HEADERS},
+    body: JSON.stringify(newPlayer),
+  };
 }
 
 export {handler};

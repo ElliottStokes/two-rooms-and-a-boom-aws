@@ -1,6 +1,7 @@
 import {handler} from '..';
 import {getPlayerDetails} from '../../../dao';
 
+import type {APIGatewayProxyEvent} from 'aws-lambda';
 import type {Player} from '../../../types';
 
 jest.mock('../../../dao', () => ({
@@ -13,13 +14,9 @@ const MOCK_PLAYER: Player = {
   cardId: '987-zxy',
   room: 'A',
 };
-const MOCK_REQUEST_EVENT = {
-  requestContext: {
-    http: {
-      path: `http://2468-qwerty.lambda-url.eu-west-2.on.aws/${MOCK_PLAYER.id}`,
-    },
-  },
-};
+const MOCK_REQUEST_EVENT: APIGatewayProxyEvent = {
+  pathParameters: {playerId: MOCK_PLAYER.id},
+} as unknown as APIGatewayProxyEvent;
 
 describe('getPlayerDetails', () => {
   beforeEach(() => {
@@ -33,7 +30,7 @@ describe('getPlayerDetails', () => {
 
   it('should return player details on a successful run', async () => {
     const {body} = await handler(MOCK_REQUEST_EVENT);
-    expect(body).toStrictEqual(MOCK_PLAYER);
+    expect(body).toStrictEqual(JSON.stringify(MOCK_PLAYER));
   });
 
   it('should return statusCode 200 on a successful run', async () => {
