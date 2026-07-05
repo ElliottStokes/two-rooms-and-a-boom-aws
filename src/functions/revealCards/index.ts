@@ -1,5 +1,4 @@
-import {getGameId, startGame} from '../../dao';
-import {handler as assignPlayers} from '../assignPlayers';
+import {getGameId, revealCards} from '../../dao';
 import {DEFAULT_CORS_HEADERS} from '../constants';
 
 async function handler() {
@@ -13,8 +12,7 @@ async function handler() {
     };
   }
 
-  await assignPlayers();
-  await startGame(gameId);
+  await revealCards(gameId);
   return {
     statusCode: 200,
     headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},

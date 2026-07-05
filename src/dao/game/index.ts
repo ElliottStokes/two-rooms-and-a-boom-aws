@@ -5,5 +5,6 @@ export {getGameId} from './getGameId';
 export {getGameState} from './getGameState';
 export {listAllPlayers} from './listAllPlayers';
 export {resetActiveCards} from './resetActiveCards';
+export {revealCards} from './revealCards';
 export {setActiveCards} from './setActiveCards';
 export {startGame} from './startGame';

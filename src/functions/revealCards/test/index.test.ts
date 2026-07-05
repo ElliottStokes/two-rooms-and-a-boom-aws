@@ -1,15 +1,11 @@
 import {randomUUID} from 'crypto';
 
 import {handler} from '..';
-import {handler as assignPlayers} from '../../assignPlayers';
-import {getGameId, startGame} from '../../../dao';
+import {getGameId, revealCards} from '../../../dao';
 
 jest.mock('../../../dao', () => ({
   getGameId: jest.fn(),
-  startGame: jest.fn(),
-}));
-jest.mock('../../assignPlayers', () => ({
-  handler: jest.fn(),
+  revealCards: jest.fn(),
 }));
 
 const MOCK_GAME_ID = randomUUID();
@@ -17,7 +13,7 @@ const MOCK_GAME_ID = randomUUID();
 describe('assignPlayers', () => {
   beforeEach(() => {
     jest.mocked(getGameId).mockResolvedValue(MOCK_GAME_ID);
-    jest.mocked(startGame).mockResolvedValue();
+    jest.mocked(revealCards).mockResolvedValue();
   });
 
   it('should call getGameId dao function once', async () => {
@@ -25,14 +21,9 @@ describe('assignPlayers', () => {
     expect(getGameId).toHaveBeenCalledTimes(1);
   });
 
-  it('should call assignPlayers function once', async () => {
+  it('should call revealCards dao function once', async () => {
     await handler();
-    expect(assignPlayers).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call startGame dao function once', async () => {
-    await handler();
-    expect(startGame).toHaveBeenCalledTimes(1);
+    expect(revealCards).toHaveBeenCalledTimes(1);
   });
 
   it('should return status code 200', async () => {
