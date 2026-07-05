@@ -1,4 +1,5 @@
 import {checkExistingCredentials} from '../../dao';
+import {DEFAULT_CORS_HEADERS} from '../constants';
 
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 
@@ -13,13 +14,13 @@ async function handler({
   if (existingPlayer) {
     return {
       statusCode: 200,
-      headers: {'Content-Type': 'text/json'},
+      headers: {'Content-Type': 'text/json', ...DEFAULT_CORS_HEADERS},
       body: JSON.stringify(existingPlayer),
     };
   }
   return {
     statusCode: 404,
-    headers: {'Content-Type': 'text/plain'},
+    headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
     body: 'Player does not exist',
   };
 }

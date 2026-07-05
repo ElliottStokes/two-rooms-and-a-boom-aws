@@ -1,4 +1,5 @@
 import {getGameId, getGameState} from '../../dao';
+import {DEFAULT_CORS_HEADERS} from '../constants';
 
 async function handler() {
   const gameId = await getGameId();
@@ -12,7 +13,7 @@ async function handler() {
   console.log('gameState', gameState);
   return {
     statusCode: 200,
-    headers: {'Content-Type': 'text/json'},
+    headers: {'Content-Type': 'text/json', ...DEFAULT_CORS_HEADERS},
     body: JSON.stringify({gameState}),
   };
 }

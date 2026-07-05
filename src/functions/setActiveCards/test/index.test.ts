@@ -2,6 +2,7 @@ import {APIGatewayProxyEvent} from 'aws-lambda';
 
 import {handler} from '..';
 import {resetActiveCards, setActiveCards} from '../../../dao';
+import {DEFAULT_CORS_HEADERS} from '../../constants';
 
 jest.mock('../../../dao', () => ({
   resetActiveCards: jest.fn(),
@@ -38,6 +39,7 @@ describe('setActiveCards', () => {
     const response = await handler({} as unknown as APIGatewayProxyEvent);
     expect(response).toStrictEqual({
       statusCode: 400,
+      headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
       body: 'Missing body from request',
     });
   });
@@ -49,6 +51,7 @@ describe('setActiveCards', () => {
     });
     expect(response).toStrictEqual({
       statusCode: 400,
+      headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
       body: 'missing activeCardNames from request body',
     });
   });
@@ -60,6 +63,7 @@ describe('setActiveCards', () => {
     const response = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(response).toStrictEqual({
       statusCode: 500,
+      headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
       body: 'Something went wrong',
     });
   });
@@ -71,6 +75,7 @@ describe('setActiveCards', () => {
     const response = await handler(MOCK_API_GATEWAY_PROXY_EVENT);
     expect(response).toStrictEqual({
       statusCode: 500,
+      headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
       body: 'Something went wrong',
     });
   });

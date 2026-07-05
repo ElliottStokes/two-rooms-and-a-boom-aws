@@ -5,6 +5,7 @@ import {
   listAllPlayers,
 } from '../../dao';
 import {dealCards} from './utils';
+import {DEFAULT_CORS_HEADERS} from '../constants';
 
 import type {APIGatewayProxyResult} from 'aws-lambda';
 import type {Room} from '../../types';
@@ -32,7 +33,7 @@ async function handler(): Promise<APIGatewayProxyResult> {
   if (uniqueCards.length > unassignedPlayers.length) {
     return {
       statusCode: 422,
-      headers: {'Content-Type': 'text/plain'},
+      headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
       body:
         'more unique cards assigned than there are players.' +
         'This is a known issue and will be resolved in ' +
@@ -43,7 +44,11 @@ async function handler(): Promise<APIGatewayProxyResult> {
   const assignedPlayers = dealCards(unassignedPlayers, uniqueCards, basicCards);
   assignedPlayers.forEach(player => (player.room = assignRoom()));
   await assignPlayers(assignedPlayers, gameId);
-  return {statusCode: 204, body: ''};
+  return {
+    statusCode: 204,
+    headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
+    body: '',
+  };
 }
 
 function assignRoom() {

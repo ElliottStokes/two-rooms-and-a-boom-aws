@@ -1,5 +1,6 @@
 import {handler} from '..';
 import {resetActiveCards} from '../../../dao';
+import {DEFAULT_CORS_HEADERS} from '../../constants';
 
 jest.mock('../../../dao', () => ({
   resetActiveCards: jest.fn(),
@@ -23,6 +24,7 @@ describe('clearActiveCards', () => {
     const response = await handler();
     expect(response).toStrictEqual({
       statusCode: 500,
+      headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
       body: 'Something went wrong',
     });
   });
