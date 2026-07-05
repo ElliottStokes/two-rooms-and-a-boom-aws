@@ -78,6 +78,7 @@ export class TwoRoomsAndABoomStack extends Stack {
     gamePath
       .addResource('end')
       .addMethod('PATCH', createEndpoint(this, 'endGame'));
+    gamePath.addMethod('GET', createEndpoint(this, 'getGameState'));
 
     new CfnOutput(this, 'ApiGatewayUrl', {value: restApi.url});
   }

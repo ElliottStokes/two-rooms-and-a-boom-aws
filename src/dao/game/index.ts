@@ -2,6 +2,7 @@ export {assignPlayers} from './assignPlayers';
 export {endGame} from './endGame';
 export {getActiveCards} from './getActiveCards';
 export {getGameId} from './getGameId';
+export {getGameState} from './getGameState';
 export {listAllPlayers} from './listAllPlayers';
 export {resetActiveCards} from './resetActiveCards';
 export {setActiveCards} from './setActiveCards';
