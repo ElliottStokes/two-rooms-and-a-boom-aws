@@ -1,4 +1,4 @@
-import {getGameId, endGame} from '../../dao';
+import {getGameId, revealCards} from '../../dao';
 import {DEFAULT_CORS_HEADERS} from '../constants';
 
 async function handler() {
@@ -12,8 +12,12 @@ async function handler() {
     };
   }
 
-  await endGame(gameId);
-  return {statusCode: 200, headers: DEFAULT_CORS_HEADERS};
+  await revealCards(gameId);
+  return {
+    statusCode: 200,
+    headers: {'Content-Type': 'text/plain', ...DEFAULT_CORS_HEADERS},
+    body: '',
+  };
 }
 
 export {handler};

@@ -16,6 +16,7 @@ const MOCK_PLAYER_DETAILS: Player = {
   id: MOCK_PLAYER_ID,
   username: 'test-player',
   cardId: '987-xyz',
+  cardTitle: 'Test Card',
   room: 'A',
 };
 
@@ -27,6 +28,7 @@ describe('getPlayerDetails', () => {
         {
           username: MOCK_PLAYER_DETAILS.username,
           cardid: MOCK_PLAYER_DETAILS.cardId,
+          cardtitle: MOCK_PLAYER_DETAILS.cardTitle,
           room: MOCK_PLAYER_DETAILS.room,
         },
       ],
@@ -36,7 +38,7 @@ describe('getPlayerDetails', () => {
   it('should call client with get player details statement', async () => {
     await getPlayerDetails(MOCK_PLAYER_ID);
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      'SELECT p.username, c.cardid, g.room FROM two_rooms_and_a_boom.game g ' +
+      'SELECT p.username, c.cardid, c.cardtitle, g.room FROM two_rooms_and_a_boom.game g ' +
         'LEFT JOIN two_rooms_and_a_boom.player p ON g.playerid = p.playerid ' +
         'LEFT JOIN two_rooms_and_a_boom.card c ON g.cardid = c.cardid ' +
         'WHERE g.playerid = $1',
