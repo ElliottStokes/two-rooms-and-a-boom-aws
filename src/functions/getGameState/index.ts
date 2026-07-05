@@ -10,11 +10,13 @@ async function handler() {
   }
 
   const gameState = await getGameState();
-  console.log('gameState', gameState);
   return {
     statusCode: 200,
     headers: {'Content-Type': 'text/json', ...DEFAULT_CORS_HEADERS},
-    body: JSON.stringify({gameState}),
+    body: JSON.stringify({
+      gameState: gameState?.gameState,
+      revealTime: gameState?.revealTime,
+    }),
   };
 }
 

@@ -14,7 +14,7 @@ describe('getGameState', () => {
   beforeEach(() => {
     CLIENT_MOCK.query.mockResolvedValue({
       rowCount: 1,
-      rows: [{gamestate: 'WAITING_FOR_HOST'}],
+      rows: [{gamestate: 'WAITING_FOR_HOST', matchendtime: null}],
     });
   });
 
@@ -26,13 +26,16 @@ describe('getGameState', () => {
   it('should call Client with query', async () => {
     await getGameState();
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      'SELECT gamestate FROM two_rooms_and_a_boom.gameState;',
+      'SELECT gamestate, matchendtime FROM two_rooms_and_a_boom.gameState;',
     );
   });
 
   it('should return with game state', async () => {
     const gameState = await getGameState();
-    expect(gameState).toBe('WAITING_FOR_HOST');
+    expect(gameState).toStrictEqual({
+      gameState: 'WAITING_FOR_HOST',
+      revealTime: null,
+    });
   });
 
   it('should return null when no rows are returned', async () => {

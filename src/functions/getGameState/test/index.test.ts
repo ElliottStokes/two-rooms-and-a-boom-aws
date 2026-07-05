@@ -13,7 +13,9 @@ const MOCK_GAME_ID = randomUUID();
 describe('assignPlayers', () => {
   beforeEach(() => {
     jest.mocked(getGameId).mockResolvedValue(MOCK_GAME_ID);
-    jest.mocked(getGameState).mockResolvedValue('WAITING_FOR_HOST');
+    jest
+      .mocked(getGameState)
+      .mockResolvedValue({gameState: 'WAITING_FOR_HOST', revealTime: null});
   });
 
   it('should call getGameId dao function once', async () => {
@@ -35,6 +37,7 @@ describe('assignPlayers', () => {
     const response = await handler();
     expect(JSON.parse(response.body)).toStrictEqual({
       gameState: 'WAITING_FOR_HOST',
+      revealTime: null,
     });
   });
 

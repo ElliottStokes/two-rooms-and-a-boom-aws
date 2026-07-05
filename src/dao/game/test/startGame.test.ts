@@ -27,7 +27,7 @@ describe('startGame', () => {
   it('should call Client with query', async () => {
     await startGame(MOCK_GAME_ID);
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      "UPDATE two_rooms_and_a_boom.gameState SET gamestate = 'IN_PROGRESS' WHERE gameid = $1;",
+      "UPDATE two_rooms_and_a_boom.gameState SET gamestate = 'IN_PROGRESS', matchendtime = NULL WHERE gameid = $1;",
       [MOCK_GAME_ID],
     );
   });

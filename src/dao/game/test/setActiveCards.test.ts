@@ -21,7 +21,7 @@ describe('setActiveCards', () => {
   it('should call Client with query function', async () => {
     await setActiveCards(MOCK_ACTIVE_CARD_NAMES);
     expect(CLIENT_MOCK.query).toHaveBeenCalledWith(
-      "UPDATE two_rooms_and_a_boom.card SET isactive = TRUE WHERE cardtitle IN ('cardOne', 'cardTwo', 'cardThree');",
+      "UPDATE two_rooms_and_a_boom.card SET isactive = TRUE WHERE cardtitle IN ('CardOne', 'CardTwo', 'CardThree');",
     );
   });
 
