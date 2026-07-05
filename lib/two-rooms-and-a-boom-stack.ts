@@ -11,12 +11,24 @@ const AWS_REGION = process.env.AWS_REGION ?? '';
 const DSQL_CLUSTER_ID = process.env.DSQL_CLUSTER_ID ?? '';
 const DSQL_CLUSTER_ENDPOINT = process.env.DSQL_CLUSTER_ENDPOINT ?? '';
 
+const DEFAULT_CORS_OPTIONS = {
+  defaultCorsPreflightOptions: {
+    allowOrigins: ['*'],
+    allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+  },
+};
+
 export class TwoRoomsAndABoomStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const restApi = new RestApi(this, 'two-rooms-and-a-boom-api-gateway');
-    const playerPath = restApi.root.addResource('player');
+    const restApi = new RestApi(
+      this,
+      'two-rooms-and-a-boom-api-gateway',
+      DEFAULT_CORS_OPTIONS,
+    );
+    const playerPath = restApi.root.addResource('player', DEFAULT_CORS_OPTIONS);
     playerPath
       .addResource('all')
       .addMethod('GET', createEndpoint(this, 'listAllPlayers'));
