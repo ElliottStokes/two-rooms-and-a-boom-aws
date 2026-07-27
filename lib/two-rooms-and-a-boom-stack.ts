@@ -80,6 +80,11 @@ export class TwoRoomsAndABoomStack extends Stack {
 
     httpApi.addRoutes({
       path: '/cards',
+      methods: [HttpMethod.GET],
+      integration: createEndpoint(this, 'getActiveCards'),
+    });
+    httpApi.addRoutes({
+      path: '/cards',
       methods: [HttpMethod.PATCH],
       integration: createEndpoint(this, 'setActiveCards'),
     });
